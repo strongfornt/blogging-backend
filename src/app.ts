@@ -1,9 +1,9 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-// import globalErrorHandler from './app/middleware/globalErrorHanlder';
-// import notFound from './app/middleware/notFound';
 import  cookieParser from 'cookie-parser'
 import router from './app/router';
+import notFound from './app/middleware/not-found.api';
+import globalErrorHandler from './app/middleware/global.error';
 
 const app: Application = express();
 app.use(express.json());
@@ -16,11 +16,11 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 //applications routes
-app.use('/api/v1', router)
+app.use('/api', router)
 
 // // global error handlers
-// app.use(notFound);
-// app.use(globalErrorHandler);
+app.use(notFound);
+app.use(globalErrorHandler);
 
 // start the server
 export default app;

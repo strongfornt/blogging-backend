@@ -1,0 +1,34 @@
+import { z } from "zod";
+
+// Validation for the userNameSchema
+
+// Validation for the userSchema
+const createUserValidationSchema = z.object({
+  body: z.object({
+    name: z.string({
+      required_error: "Name is required",
+    }),
+    email: z
+      .string({
+        required_error: "Email is required",
+      })
+      .email("Invalid email format")
+      .trim()
+      .toLowerCase(),
+    password: z
+      .string({
+        required_error: "Password is required",
+      })
+      .min(4, "Password must be at least 4 characters long"),
+    role: z
+      .enum(["admin", "user"], {
+        required_error: "Role is required",
+      })
+      .default("user"),
+    isBlocked: z.boolean().default(false),
+  }),
+});
+// Type inference from the schema
+export const UserValidationSchema = {
+  createUserValidationSchema,
+};

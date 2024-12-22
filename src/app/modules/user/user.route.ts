@@ -5,9 +5,10 @@ import { UserController } from './user.controller';
 const router = express.Router();
 
 
-router.route('/register')
-        .post(validationMiddleWare(UserValidationSchema.createUserValidationSchema),
+router.route('/')
+        .post(validationMiddleWare(UserValidationSchema.registerUserValidationSchema),
         UserController.registerUser
     )
+
 
 export const UserRoute = router;

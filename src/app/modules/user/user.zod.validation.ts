@@ -3,7 +3,7 @@ import { z } from "zod";
 // Validation for the userNameSchema
 
 // Validation for the userSchema
-const createUserValidationSchema = z.object({
+const registerUserValidationSchema = z.object({
   body: z.object({
     name: z.string({
       required_error: "Name is required",
@@ -28,7 +28,10 @@ const createUserValidationSchema = z.object({
     isBlocked: z.boolean().default(false),
   }),
 });
+
+
+
 // Type inference from the schema
 export const UserValidationSchema = {
-  createUserValidationSchema,
+  registerUserValidationSchema,
 };

@@ -14,7 +14,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: any, req, res, next) => {
   let statusCode = 500;
   let message ='Something went wrong';
 
-  let errorSources: TErrorSource = [
+  let error: TErrorSource = [
     {
       path: '',
       message: 'something went wrong',
@@ -26,37 +26,37 @@ const globalErrorHandler: ErrorRequestHandler = (err: any, req, res, next) => {
 
     statusCode = simpleFydError?.statusCode;
     message = simpleFydError?.message;
-    errorSources = simpleFydError?.error;
+    error = simpleFydError?.error;
     // console.log(simpleFydError);
   } else if (err?.name === 'ValidationError') {
     const simpleFydError = handleValidationError(err);
 
     statusCode = simpleFydError?.statusCode;
     message = simpleFydError?.message;
-    errorSources = simpleFydError?.error;
+    error = simpleFydError?.error;
   } else if (err?.name === 'CastError') {
     const simpleFydError = handleCastError(err);
 
     statusCode = simpleFydError?.statusCode;
     message = simpleFydError?.message;
-    errorSources = simpleFydError?.error;
+    error = simpleFydError?.error;
   } else if (err?.code === 11000) {
     const simpleFydError = handleDuplicateError(err);
 
     statusCode = simpleFydError?.statusCode;
     message = simpleFydError?.message;
-    errorSources = simpleFydError?.error;
+    error = simpleFydError?.error;
   } else if (err instanceof CustomError) {
     statusCode = err?.statusCode;
     message = err?.message;
-    errorSources =[{
+    error =[{
       path: '',
       message: err?.message, 
     }];
   }
   else if (err instanceof Error) {
     message = err?.message;
-    errorSources =[{
+    error =[{
       path: '',
       message: err?.message, 
     }];
@@ -66,7 +66,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: any, req, res, next) => {
     success: false,
     message,
     statusCode,
-    errorSources,
+    error,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
     // error: err,
   });

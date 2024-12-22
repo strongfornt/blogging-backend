@@ -6,7 +6,7 @@ const handleDuplicateError = (err:any):TGenericErrorResponse => {
     const match = err.message.match(/"([^"]*)"/)
     const extractedMessage = match && match[1]
 
-    const errorSources: TErrorSource = [{
+    const error: TErrorSource = [{
         path: '',
         message: `${extractedMessage} is already exists`,
     }] 
@@ -16,7 +16,7 @@ const handleDuplicateError = (err:any):TGenericErrorResponse => {
     return {
       statusCode,
       message: 'Invalid ID',
-      errorSources,
+      error,
     };
 }
 

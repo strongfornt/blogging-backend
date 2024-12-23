@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { TErrorSource, TGenericErrorResponse } from "../interface/error";
 
 const handleDuplicateError = (err:any):TGenericErrorResponse => {
@@ -15,7 +14,7 @@ const handleDuplicateError = (err:any):TGenericErrorResponse => {
 
     return {
       statusCode,
-      message: 'Invalid ID',
+      message:'Duplicate error',
       error,
     };
 }

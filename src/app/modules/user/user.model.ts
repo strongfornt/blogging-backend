@@ -51,6 +51,9 @@ userSchema.pre('save', async function (next) {
 userSchema.statics.isUserExistsByEmail = async function (email: string) {
   return await this.findOne({ email }).select('+password');
 };
+userSchema.statics.isUserExistsByUserId = async function (id: string) {
+  return await this.findById(id).select('+password');
+};
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();

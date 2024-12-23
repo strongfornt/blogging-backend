@@ -30,7 +30,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
 
   //create token and send to the client
   const jwtPayload = {
-    userId: isUserExists?.email,
+    userId: isUserExists?._id,
     role: isUserExists?.role,
   };
   const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, {

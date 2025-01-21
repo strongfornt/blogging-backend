@@ -11,7 +11,7 @@ class QueryBuilder<T> {
 
   //search
   search(searchableFields: string[]) {
-    const searchTerm = this?.query?.searchTerm;
+    const searchTerm = this?.query?.search;
     if (searchTerm) {
       this.modelQuery = this?.modelQuery.find({
         $or: searchableFields.map(
@@ -29,7 +29,7 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query };
 
     //Filtering
-    const excludeFields = ["searchTerm", "sortBy", "limit", "page", "fields"];
+    const excludeFields = ["search", "sortBy", "sortOrder"];
 
     excludeFields.forEach((el) => delete queryObj[el]);
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
@@ -43,9 +43,9 @@ class QueryBuilder<T> {
 
     return this;
   }
-  
-  sortOrder () {
-    const sortOrder = (this?.query?.sortOrder as string) || 'desc';
+
+  sortOrder() {
+    const sortOrder = (this?.query?.sortOrder as string) || "desc";
     this.modelQuery = this.modelQuery.sort(sortOrder);
     return this;
   }

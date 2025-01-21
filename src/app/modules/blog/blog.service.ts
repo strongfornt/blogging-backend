@@ -1,11 +1,10 @@
+import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
+import QueryBuilder from "../../builder/Query.builder";
+import CustomError from "../../errors/Custom.error";
+import { BlogSearchAbleFields } from "./blog.constant";
 import { IBlogUpdate, IDeleteBlog, TBlog } from "./blog.interface";
 import { BlogModel } from "./blog.model";
-import CustomError from "../../errors/Custom.error";
-import { StatusCodes } from "http-status-codes";
-import QueryBuilder from "../../builder/Query.builder";
-import { BlogSearchAbleFields } from "./blog.constant";
-import { JwtPayload } from "jsonwebtoken";
 
 const createBlogIntoDB = async (payload: TBlog) => {
   const session = await mongoose.startSession();
@@ -83,16 +82,19 @@ const deleteBlogFromDB = async (payload: IDeleteBlog) => {
     );
   }
 
-  const response  = await BlogModel.findByIdAndDelete(blogId)
+  const response = await BlogModel.findByIdAndDelete(blogId);
 
-  return response
-
+  return response;
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
-  const response = new QueryBuilder(BlogModel.find(), query).search(
-    BlogSearchAbleFields
-  );
+  const response = new QueryBuilder(BlogModel.find(), query)
+    .search(BlogSearchAbleFields)
+    .filter()
+    .sort()
+    .sortOrder();
+  const result = await response.modelQuery;
+  return result;
 };
 
 export const BlogServices = {

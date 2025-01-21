@@ -6,3 +6,18 @@ export interface TBlog {
     author: Types.ObjectId
     isPublished: boolean;
 }
+
+export interface IBlogUpdate {
+    body: {
+      title: string;
+      content: string;
+    };
+    blogId: string;
+    user: {
+      userId: string;
+      role: "user" | "admin"; 
+      iat: number; 
+      exp: number; 
+    };
+  }
+  

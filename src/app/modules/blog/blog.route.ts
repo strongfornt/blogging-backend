@@ -14,6 +14,11 @@ route
     validationMiddleWare(BlogValidation.blogValidationSchema),
     BlogController.createBlog
   )
-  .get();
+  .get(
+    BlogController.getAllBlog
+  )
+
+route.route("/:id")
+      .patch(authMiddleware(User_Role.user, User_Role.admin),BlogController.updateBlog)
 
 export const BlogRoute = route;

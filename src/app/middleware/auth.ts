@@ -29,6 +29,8 @@ const authMiddleware = (...requiredRoles: TUserRole[]) => {
       config.jwt_access_secret as string
     ) as JwtPayload;
     const { role, userId, iat } = decoded;
+    // console.log(decoded);
+    
 
     const isUserExists = await UserModel.isUserExistsByUserId(userId);
 

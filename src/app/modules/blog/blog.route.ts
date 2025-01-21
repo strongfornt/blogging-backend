@@ -20,5 +20,6 @@ route
 
 route.route("/:id")
       .patch(authMiddleware(User_Role.user, User_Role.admin),BlogController.updateBlog)
+      .delete(authMiddleware(User_Role.user, User_Role.admin), BlogController.deleteBlog)
 
 export const BlogRoute = route;

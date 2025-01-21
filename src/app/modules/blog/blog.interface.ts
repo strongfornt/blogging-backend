@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
 
 export interface TBlog {
@@ -13,11 +14,8 @@ export interface IBlogUpdate {
       content: string;
     };
     blogId: string;
-    user: {
-      userId: string;
-      role: "user" | "admin"; 
-      iat: number; 
-      exp: number; 
-    };
+    user: JwtPayload
   }
+
+export interface IDeleteBlog extends Omit<IBlogUpdate, 'body'>{}  
   

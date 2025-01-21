@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import { IBlogUpdate, TBlog } from "./blog.interface";
+import { IBlogUpdate, IDeleteBlog, TBlog } from "./blog.interface";
 import { BlogModel } from "./blog.model";
 import CustomError from "../../errors/Custom.error";
 import { StatusCodes } from "http-status-codes";
 import QueryBuilder from "../../builder/Query.builder";
 import { BlogSearchAbleFields } from "./blog.constant";
+import { JwtPayload } from "jsonwebtoken";
 
 const createBlogIntoDB = async (payload: TBlog) => {
   const session = await mongoose.startSession();
@@ -30,18 +31,18 @@ const createBlogIntoDB = async (payload: TBlog) => {
 const updateBlogIntoDB = async (payload: IBlogUpdate) => {
   const { body, blogId, user } = payload;
 
-  console.log(user);
-  
+  // console.log(user);
+
   const isBlogExist = await BlogModel.findById(blogId);
 
-  if(!isBlogExist) {
-    throw new CustomError(StatusCodes.NOT_FOUND, 'Blog not found!')
+  if (!isBlogExist) {
+    throw new CustomError(StatusCodes.NOT_FOUND, "Blog not found!");
   }
 
   const authorId = isBlogExist?.author.toString();
 
-  if(user?.role === 'admin') {
-    throw new CustomError(StatusCodes.FORBIDDEN, 'You cannot update any blog!')
+  if (user?.role === "admin") {
+    throw new CustomError(StatusCodes.FORBIDDEN, "You cannot update any blog!");
   }
 
   if (user?.userId !== authorId) {
@@ -64,6 +65,30 @@ const updateBlogIntoDB = async (payload: IBlogUpdate) => {
   return blog;
 };
 
+const deleteBlogFromDB = async (payload: IDeleteBlog) => {
+  const { blogId, user } = payload;
+
+  const isBlogExist = await BlogModel.findById(blogId);
+
+  if (!isBlogExist) {
+    throw new CustomError(StatusCodes.NOT_FOUND, "Blog not found!");
+  }
+
+  const authorId = isBlogExist?.author.toString();
+
+  if (user?.role === "user" && user?.userId !== authorId) {
+    throw new CustomError(
+      StatusCodes.FORBIDDEN,
+      "You are not authorized to delete this blog!"
+    );
+  }
+
+  const response  = await BlogModel.findByIdAndDelete(blogId)
+
+  return response
+
+};
+
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   const response = new QueryBuilder(BlogModel.find(), query).search(
     BlogSearchAbleFields
@@ -74,4 +99,5 @@ export const BlogServices = {
   createBlogIntoDB,
   getAllBlogsFromDB,
   updateBlogIntoDB,
+  deleteBlogFromDB,
 };

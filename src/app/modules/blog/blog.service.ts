@@ -30,26 +30,36 @@ const createBlogIntoDB = async (payload: TBlog) => {
 const updateBlogIntoDB = async (payload: IBlogUpdate) => {
   const { body, blogId, user } = payload;
 
+  console.log(user);
+  
   const isBlogExist = await BlogModel.findById(blogId);
+
+  if(!isBlogExist) {
+    throw new CustomError(StatusCodes.NOT_FOUND, 'Blog not found!')
+  }
+
   const authorId = isBlogExist?.author.toString();
 
-  if (user?.role === "user") {
-    if (user?.userId !== authorId) {
-      throw new CustomError(
-        StatusCodes.FORBIDDEN,
-        "You are not authorized to update this blog!"
-      );
-    }
+  if(user?.role === 'admin') {
+    throw new CustomError(StatusCodes.FORBIDDEN, 'You cannot update any blog!')
+  }
+
+  if (user?.userId !== authorId) {
+    throw new CustomError(
+      StatusCodes.FORBIDDEN,
+      "You are not authorized to update this blog!"
+    );
   }
 
   const blog = await BlogModel.findByIdAndUpdate(
     blogId,
     { $set: { ...body } },
     { new: true, runValidators: true }
-  ).select("-isPublished -createdAt -updatedAt").populate('author');
+  )
+    .select("-isPublished -createdAt -updatedAt")
+    .populate("author");
 
-  console.log(blog);
-  
+  // console.log(blog);
 
   return blog;
 };

@@ -8,14 +8,6 @@ export interface TBlog {
     author: Types.ObjectId
 }
 
-export interface ICreateBlog {
-  body: {
-    title: string;
-    content: string;
-    isPublished?: boolean;
-  },
-  user: JwtPayload;
-}
 
 export interface IBlogUpdate {
     body: {

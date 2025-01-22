@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catch-async";
 import sendResponse from "../../utils/sendResponse";
-import { ICreateBlog, IDeleteBlog } from "./blog.interface";
+import { IDeleteBlog } from "./blog.interface";
 import { BlogServices } from "./blog.service";
 
 const createBlog = catchAsync(async (req, res, next) => {

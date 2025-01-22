@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import QueryBuilder from "../../builder/Query.builder";
 import CustomError from "../../errors/Custom.error";
 import { BlogSearchAbleFields } from "./blog.constant";
-import { IBlogUpdate, ICreateBlog, IDeleteBlog, TBlog } from "./blog.interface";
+import { IBlogUpdate, IDeleteBlog, TBlog } from "./blog.interface";
 import { BlogModel } from "./blog.model";
 
 const createBlogIntoDB = async (payload: TBlog) => {

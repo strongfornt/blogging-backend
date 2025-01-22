@@ -92,7 +92,8 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     .search(BlogSearchAbleFields)
     .filter()
     .sort()
-    .sortOrder();
+    .sortOrder()
+    .excludeFields('-createdAt -updatedAt');
   const result = await response.modelQuery;
   return result;
 };

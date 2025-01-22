@@ -74,11 +74,17 @@ class QueryBuilder<T> {
   //     return this;
   //   }
 
-  //   fields() {
-  //     const fields = (this?.query?.fields as string)?.split(',')?.join(' ') || '';
-  //     this.modelQuery = this.modelQuery.select(fields);
-  //     return this;
-  //   }
+  // field() {
+  //   const fields = (this?.query?.fields as string)?.split(',')?.join(' ') || '';
+  //   this.modelQuery = this.modelQuery.select(fields);
+  //   return this;
+  // }
+
+    excludeFields(excludeFields: string ) {
+      this.modelQuery = this.modelQuery.select(excludeFields);
+      return this;
+    }
+
 }
 
 export default QueryBuilder;

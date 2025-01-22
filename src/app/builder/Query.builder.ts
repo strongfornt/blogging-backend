@@ -1,4 +1,5 @@
-import { FilterQuery, Query } from "mongoose";
+import mongoose, { FilterQuery, Query } from "mongoose";
+import { boolean } from "zod";
 
 class QueryBuilder<T> {
   constructor(
@@ -32,6 +33,21 @@ class QueryBuilder<T> {
     const excludeFields = ["search", "sortBy", "sortOrder"];
 
     excludeFields.forEach((el) => delete queryObj[el]);
+
+    for (const key in queryObj) {
+      const value: any = queryObj[key];
+
+      if (mongoose.Types.ObjectId.isValid(value)) {
+        queryObj[key] = new mongoose.Types.ObjectId(value as string);
+      } else {
+        if (value == "true" || value === "false") {
+          queryObj[key] = value;
+        } else {
+          queryObj[key] = { $regex: queryObj[key], $options: "i" };
+        }
+      }
+    }
+
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
     return this;
   }

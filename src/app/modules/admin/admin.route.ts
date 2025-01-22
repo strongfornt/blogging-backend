@@ -14,4 +14,9 @@ routes.patch(
   AdminController.blockUser
 );
 
+routes.delete("blogs/:id",
+    authMiddleware(User_Role.admin),
+    AdminController.deleteBlog
+)
+
 export const AdminRoute = routes;

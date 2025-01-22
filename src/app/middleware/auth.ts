@@ -11,10 +11,9 @@ const authMiddleware = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const Bearer_token = req.headers.authorization;
     // console.log(Bearer_token);
-    const token = Bearer_token?.split(" ")[1]
+    const token = Bearer_token?.split(" ")[1];
     // console.log(token);
-    
-    
+
     //if the token sent from the client
     if (!token) {
       throw new CustomError(
@@ -30,7 +29,6 @@ const authMiddleware = (...requiredRoles: TUserRole[]) => {
     ) as JwtPayload;
     const { role, userId, iat } = decoded;
     // console.log(decoded);
-    
 
     const isUserExists = await UserModel.isUserExistsByUserId(userId);
 

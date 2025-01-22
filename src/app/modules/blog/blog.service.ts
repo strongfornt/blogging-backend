@@ -6,25 +6,16 @@ import { BlogSearchAbleFields } from "./blog.constant";
 import { IBlogUpdate, ICreateBlog, IDeleteBlog, TBlog } from "./blog.interface";
 import { BlogModel } from "./blog.model";
 
-const createBlogIntoDB = async (payload: ICreateBlog) => {
+const createBlogIntoDB = async (payload: TBlog) => {
   const session = await mongoose.startSession();
-const {body, user} = payload;
-const blog = {
-  ...body,
-  author: user?.userId,
-}
   try {
     session.startTransaction();
 
-    if(user?.role === 'admin') {
-      throw new CustomError(StatusCodes.FORBIDDEN, "Only user can create blog!");
-    }
-    const resBlog = await BlogModel.create(blog);
-
-    
-    const response = await BlogModel.findById(resBlog?._id)
+    const resBlog = await BlogModel.create([payload], {session})
+    const blogId = resBlog[0]?._id
+    const response = await BlogModel.findById(blogId)
       .select({ title: 1, content: 1, author: 1 })
-      .populate("author");
+      .populate("author").session(session);
 
     await session.commitTransaction();
     await session.endSession();
@@ -49,10 +40,6 @@ const updateBlogIntoDB = async (payload: IBlogUpdate) => {
   }
 
   const authorId = isBlogExist?.author.toString();
-
-  if (user?.role === "admin") {
-    throw new CustomError(StatusCodes.FORBIDDEN, "You cannot update any blog!");
-  }
 
   if (user?.userId !== authorId) {
     throw new CustomError(
@@ -85,10 +72,6 @@ const deleteBlogFromDB = async (payload: IDeleteBlog) => {
 
   const authorId = isBlogExist?.author.toString();
 
-  if(user?.role === 'admin') {
-    throw new CustomError(StatusCodes.FORBIDDEN, "You cannot delete any blog!");
-  }
-
   if (user?.userId !== authorId) {
     throw new CustomError(
       StatusCodes.FORBIDDEN,
@@ -107,7 +90,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     .filter()
     .sort()
     .sortOrder()
-    .excludeFields('-createdAt -updatedAt');
+    .excludeFields("-createdAt -updatedAt");
   const result = await response.modelQuery;
   return result;
 };

@@ -19,12 +19,12 @@ route
 route
   .route("/:id")
   .patch(
-    authMiddleware(User_Role.user, User_Role.admin),
+    authMiddleware(User_Role.user),
     validationMiddleWare(BlogValidation.updateBlogValidationSchema),
     BlogController.updateBlog
   )
   .delete(
-    authMiddleware(User_Role.user, User_Role.admin),
+    authMiddleware(User_Role.user),
     BlogController.deleteBlog
   );
 

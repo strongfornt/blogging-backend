@@ -7,15 +7,12 @@ import { BlogServices } from "./blog.service";
 const createBlog = catchAsync(async (req, res, next) => {
   const { body } = req.body;
   const user = req?.user;
-  // console.log('user from 9',user)
-
   const payload = {
-    body,
-    user,
+    ...body,
+    author:user?.userId,
   };
-  // console.log('from 9',payload, user);
 
-  const result = await BlogServices.createBlogIntoDB(payload as ICreateBlog);
+  const result = await BlogServices.createBlogIntoDB(payload);
   sendResponse(res, {
     success: true,
     message: "Blog created successfully",

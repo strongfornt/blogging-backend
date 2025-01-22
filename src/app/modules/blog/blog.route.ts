@@ -14,12 +14,18 @@ route
     validationMiddleWare(BlogValidation.blogValidationSchema),
     BlogController.createBlog
   )
-  .get(
-    BlogController.getAllBlog
-  )
+  .get(BlogController.getAllBlog);
 
-route.route("/:id")
-      .patch(authMiddleware(User_Role.user, User_Role.admin),BlogController.updateBlog)
-      .delete(authMiddleware(User_Role.user, User_Role.admin), BlogController.deleteBlog)
+route
+  .route("/:id")
+  .patch(
+    authMiddleware(User_Role.user, User_Role.admin),
+    validationMiddleWare(BlogValidation.updateBlogValidationSchema),
+    BlogController.updateBlog
+  )
+  .delete(
+    authMiddleware(User_Role.user, User_Role.admin),
+    BlogController.deleteBlog
+  );
 
 export const BlogRoute = route;

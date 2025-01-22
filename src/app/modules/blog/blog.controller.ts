@@ -1,9 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catch-async";
 import sendResponse from "../../utils/sendResponse";
+import { ICreateBlog, IDeleteBlog } from "./blog.interface";
 import { BlogServices } from "./blog.service";
-import { JwtPayload } from "jsonwebtoken";
-import { IDeleteBlog } from "./blog.interface";
 
 const createBlog = catchAsync(async (req, res, next) => {
   const { body } = req.body;
@@ -11,12 +10,12 @@ const createBlog = catchAsync(async (req, res, next) => {
   // console.log('user from 9',user)
 
   const payload = {
-    ...body,
-    author: user?.userId,
+    body,
+    user,
   };
   // console.log('from 9',payload, user);
 
-  const result = await BlogServices.createBlogIntoDB(payload);
+  const result = await BlogServices.createBlogIntoDB(payload as ICreateBlog);
   sendResponse(res, {
     success: true,
     message: "Blog created successfully",

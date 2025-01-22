@@ -3,16 +3,26 @@ import mongoose from "mongoose";
 import QueryBuilder from "../../builder/Query.builder";
 import CustomError from "../../errors/Custom.error";
 import { BlogSearchAbleFields } from "./blog.constant";
-import { IBlogUpdate, IDeleteBlog, TBlog } from "./blog.interface";
+import { IBlogUpdate, ICreateBlog, IDeleteBlog, TBlog } from "./blog.interface";
 import { BlogModel } from "./blog.model";
 
-const createBlogIntoDB = async (payload: TBlog) => {
+const createBlogIntoDB = async (payload: ICreateBlog) => {
   const session = await mongoose.startSession();
-
+const {body, user} = payload;
+const blog = {
+  ...body,
+  author: user?.userId,
+}
   try {
     session.startTransaction();
-    const createdBlog = await BlogModel.create(payload);
-    const response = await BlogModel.findById(createdBlog?._id)
+
+    if(user?.role === 'admin') {
+      throw new CustomError(StatusCodes.FORBIDDEN, "Only user can create blog!");
+    }
+    const resBlog = await BlogModel.create(blog);
+
+    
+    const response = await BlogModel.findById(resBlog?._id)
       .select({ title: 1, content: 1, author: 1 })
       .populate("author");
 
@@ -75,7 +85,11 @@ const deleteBlogFromDB = async (payload: IDeleteBlog) => {
 
   const authorId = isBlogExist?.author.toString();
 
-  if (user?.role === "user" && user?.userId !== authorId) {
+  if(user?.role === 'admin') {
+    throw new CustomError(StatusCodes.FORBIDDEN, "You cannot delete any blog!");
+  }
+
+  if (user?.userId !== authorId) {
     throw new CustomError(
       StatusCodes.FORBIDDEN,
       "You are not authorized to delete this blog!"

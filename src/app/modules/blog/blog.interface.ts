@@ -4,8 +4,17 @@ import { Types } from "mongoose";
 export interface TBlog {
     title: string;
     content: string;
-    author: Types.ObjectId
     isPublished: boolean;
+    author: Types.ObjectId
+}
+
+export interface ICreateBlog {
+  body: {
+    title: string;
+    content: string;
+    isPublished?: boolean;
+  },
+  user: JwtPayload;
 }
 
 export interface IBlogUpdate {

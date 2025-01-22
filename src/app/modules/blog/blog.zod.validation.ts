@@ -7,7 +7,15 @@ const blogValidationSchema = z.object({
     isPublished: z.boolean().default(true), 
   })
 });
+const updateBlogValidationSchema = z.object({
+  body: z.object({
+    title: z.string().optional(), 
+    content: z.string().optional(), 
+    isPublished: z.boolean().default(true).optional(), 
+  })
+});
 
 export const BlogValidation = {
-    blogValidationSchema
+    blogValidationSchema,
+    updateBlogValidationSchema
 }  

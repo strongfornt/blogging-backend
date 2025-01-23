@@ -40,6 +40,7 @@ const userSchema = new Schema<TUser, UserModelInterFace>(
 
 userSchema.pre('save', async function (next) {
   const user = this;
+  
   //hashing pass and save into db
   user.password = await bcrypt.hash(
     user.password,
@@ -55,13 +56,11 @@ userSchema.statics.isUserExistsByUserId = async function (id: string) {
   return await this.findById(id).select('+password');
 };
 userSchema.post('save', function (doc, next) {
+  
   doc.password = '';
   next();
 });
 
-userSchema.statics.isUserExistsByEmail = async function (email: string) {
-  return await this.findOne({ email }).select('+password');
-};
 
 userSchema.statics.isPasswordMatched = async function (
   plainTextPass,

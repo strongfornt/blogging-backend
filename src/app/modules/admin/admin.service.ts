@@ -6,11 +6,6 @@ import { BlogModel } from "../blog/blog.model";
 
 const blockUserIntoDB = async (payload: IBlockUserPayload) => {
   const { userId, body } = payload;
-  const isUserExist = await UserModel.findById(userId);
-
-  if (!isUserExist) {
-    throw new CustomError(StatusCodes.NOT_FOUND, "User not found!");
-  }
 
   const response = await UserModel.findByIdAndUpdate(
     userId,

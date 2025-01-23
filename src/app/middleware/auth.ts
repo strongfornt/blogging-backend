@@ -29,8 +29,8 @@ const authMiddleware = (...requiredRoles: TUserRole[]) => {
     ) as JwtPayload;
     const { role, userId, iat } = decoded;
     // console.log(decoded);
-
-    const isUserExists = await UserModel.isUserExistsByUserId(userId);
+    
+    const isUserExists = await  UserModel.isUserExistsByUserId(userId)
 
     if (!isUserExists) {
       throw new CustomError(StatusCodes.NOT_FOUND, "This user is not found!");

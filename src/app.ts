@@ -12,7 +12,7 @@ app.use(cors({origin: ['http://localhost:5173']}));
 
 
 app.get('/', async (req: Request, res: Response) => {
-  res.send('a');
+  res.send("Hello! You're at the starting point of something awesome.");
 });
 
 //applications routes

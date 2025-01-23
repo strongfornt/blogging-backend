@@ -20,14 +20,10 @@ const registerUserValidationSchema = z.object({
         required_error: "Password is required",
       })
       .min(4, "Password must be at least 4 characters long"),
-    role: z
-      .enum(["admin", "user"], {
-        required_error: "Role is required",
-      })
-      .default("user"),
-    isBlocked: z.boolean().default(false),
-  }),
+  })
+  .strict(),
 });
+
 
 
 

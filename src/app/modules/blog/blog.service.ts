@@ -10,12 +10,12 @@ const createBlogIntoDB = async (payload: TBlog) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-
-    const resBlog = await BlogModel.create([payload], {session})
-    const blogId = resBlog[0]?._id
+    const resBlog = await BlogModel.create([payload], { session });
+    const blogId = resBlog[0]?._id;
     const response = await BlogModel.findById(blogId)
       .select({ title: 1, content: 1, author: 1 })
-      .populate("author").session(session);
+      .populate("author")
+      .session(session);
 
     await session.commitTransaction();
     await session.endSession();

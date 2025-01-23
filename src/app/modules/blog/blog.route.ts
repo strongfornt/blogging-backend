@@ -1,9 +1,9 @@
 import express from "express";
-import { BlogController } from "./blog.controller";
-import { validationMiddleWare } from "../../middleware/validateRequest";
-import { BlogValidation } from "./blog.zod.validation";
 import authMiddleware from "../../middleware/auth";
+import { validationMiddleWare } from "../../middleware/validateRequest";
 import { User_Role } from "../user/user.constant";
+import { BlogController } from "./blog.controller";
+import { BlogValidation } from "./blog.zod.validation";
 
 const route = express.Router();
 
@@ -23,9 +23,6 @@ route
     validationMiddleWare(BlogValidation.updateBlogValidationSchema),
     BlogController.updateBlog
   )
-  .delete(
-    authMiddleware(User_Role.user),
-    BlogController.deleteBlog
-  );
+  .delete(authMiddleware(User_Role.user), BlogController.deleteBlog);
 
 export const BlogRoute = route;

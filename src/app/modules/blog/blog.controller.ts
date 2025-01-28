@@ -1,11 +1,11 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catch-async";
 import sendResponse from "../../utils/sendResponse";
-import { IDeleteBlog } from "./blog.interface";
+import { IBlogUpdate, IDeleteBlog } from "./blog.interface";
 import { BlogServices } from "./blog.service";
 
 const createBlog = catchAsync(async (req, res, next) => {
-  const { body } = req.body;
+  const  body  = req.body;
   const user = req?.user;
   const payload = {
     ...body,
@@ -26,13 +26,12 @@ const updateBlog = catchAsync(async (req, res, next) => {
   const user = req?.user;
   const blogId = params.id;
   const payload = {
-    ...body,
+    body,
     blogId,
     user,
   };
-  // console.log(payload);
-
-  const result = await BlogServices.updateBlogIntoDB(payload);
+  
+  const result = await BlogServices.updateBlogIntoDB(payload as IBlogUpdate);
   sendResponse(res, {
     success: true,
     message: "Blog updated successfully",

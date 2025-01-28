@@ -4,7 +4,6 @@ import { z } from "zod";
 
 // Validation for the userSchema
 const registerUserValidationSchema = z.object({
-  body: z.object({
     name: z.string({
       required_error: "Name is required",
     }),
@@ -20,14 +19,9 @@ const registerUserValidationSchema = z.object({
         required_error: "Password is required",
       })
       .min(4, "Password must be at least 4 characters long"),
-  })
-  .strict(),
-});
-
-
-
+}).strict();
 
 // Type inference from the schema
 export const UserValidationSchema = {
-  registerUserValidationSchema,
+  registerUserValidationSchema
 };

@@ -15,7 +15,7 @@ export interface IBlogUpdate {
       content: string;
     };
     blogId: string;
-    user: JwtPayload
+    user: JwtPayload 
   }
 
 export interface IDeleteBlog extends Omit<IBlogUpdate, 'body'>{}  
